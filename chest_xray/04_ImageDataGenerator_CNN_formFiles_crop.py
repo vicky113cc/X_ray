@@ -116,16 +116,20 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 model = models.Sequential()
 
 # Block 1
-model.add(layers.Conv2D(50, (3,3), padding='same', activation='relu',
+model.add(layers.Conv2D(1000, (3,3), padding='same', activation='relu',
                         input_shape=(w, h, c)))
 model.add(layers.MaxPooling2D((2,2)))
 
 # Block 2
-model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
+model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
 model.add(layers.MaxPooling2D((2,2)))
 
 # Block 3
-model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
+model.add(layers.Conv2D(500, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Block 3
+model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
 model.add(layers.MaxPooling2D((2,2)))
 
 # Flatten + Dense
