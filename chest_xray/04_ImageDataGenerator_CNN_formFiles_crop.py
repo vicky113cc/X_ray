@@ -126,6 +126,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(category, activation='softmax')
 ])
 
+# ================== VGG16 ======================
 
 learning_rate = 0.001   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
