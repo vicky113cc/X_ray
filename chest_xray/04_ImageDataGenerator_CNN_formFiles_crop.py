@@ -128,7 +128,11 @@ model.add(layers.MaxPooling2D((2,2)))
 model.add(layers.Conv2D(500, (3,3), padding='same', activation='relu'))
 model.add(layers.MaxPooling2D((2,2)))
 
-# Block 3
+# Block 4
+model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Block 5
 model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
 model.add(layers.MaxPooling2D((2,2)))
 
