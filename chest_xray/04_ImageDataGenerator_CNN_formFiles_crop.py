@@ -11,7 +11,7 @@ import os
 import cv2
 from tensorflow.keras.activations import softmax
 
-IMAGEPATH = 'chest_xray/train/'                 #  圖片資料夾路徑
+IMAGEPATH = 'train'                 #  圖片資料夾路徑
 dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
 X=[]
 Y=[]
