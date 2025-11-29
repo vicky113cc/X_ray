@@ -8,7 +8,8 @@ import os.path as path
 import os
 import cv2
 from tensorflow.keras.activations import softmax
-from tensorflow.keras.applications import VGG16
+from tensorflow.keras import layers, models
+# from tensorflow.keras.applications import VGG16
 
 IMAGEPATH = 'train'                 #  圖片資料夾路徑
 dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
@@ -94,13 +95,13 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
                             zoom_range=0.3 ,               # 隨機縮放範圍
 							data_format='channels_last')   # 圖片格式為 (張,高,寬,顏色數)
 
-# 建立模型
+# # 建立模型
 # model = tf.keras.models.Sequential()
 # # 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
 # model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3),
-#                  padding="same",
-#                  activation='relu',
-#                  input_shape=(w,h,c)))
+#                 padding="same",
+#                 activation='relu',
+#                 input_shape=(w,h,c)))
 
 
 # model.add(tf.keras.layers.Flatten())
@@ -111,26 +112,49 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 # model.add(tf.keras.layers.Dense(units=category,
 #     activation=tf.nn.softmax ))
 
-# ================= VGG16 ==================
+# 建立模型
+model = models.Sequential()
 
-# 載入預訓練的 VGG16 (去掉頂層)
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(w, h, c))
-base_model.trainable = False  # 凍結預訓練層
+# Block 1
+model.add(layers.Conv2D(50, (3,3), padding='same', activation='relu',
+                        input_shape=(w, h, c)))
+model.add(layers.MaxPooling2D((2,2)))
 
-# 建立新模型
-model = tf.keras.models.Sequential([base_model])
+# Block 2
+model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
 
-# 建立新模型
-model = tf.keras.models.Sequential([
-    base_model,
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(1000, activation='relu'),
-    tf.keras.layers.Dense(500, activation='relu'),
-    tf.keras.layers.Dense(250, activation='relu'),
-    tf.keras.layers.Dense(100, activation='relu'),  
-    tf.keras.layers.Dense(category, activation='softmax')
-])
-# ================== VGG16 ======================
+# Block 3
+model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Flatten + Dense
+model.add(layers.Flatten())
+model.add(layers.Dense(500, activation='relu'))
+
+# Output
+model.add(layers.Dense(category, activation='softmax'))
+
+# # ================= VGG16 ==================
+
+# # 載入預訓練的 VGG16 (去掉頂層)
+# base_model = VGG16(weights='imagenet', include_top=False, input_shape=(w, h, c))
+# base_model.trainable = False  # 凍結預訓練層
+
+# # 建立新模型
+# model = tf.keras.models.Sequential([base_model])
+
+# # 建立新模型
+# model = tf.keras.models.Sequential([
+#     base_model,
+#     tf.keras.layers.Flatten(),
+#     tf.keras.layers.Dense(1000, activation='relu'),
+#     tf.keras.layers.Dense(500, activation='relu'),
+#     tf.keras.layers.Dense(250, activation='relu'),
+#     tf.keras.layers.Dense(100, activation='relu'),  
+#     tf.keras.layers.Dense(category, activation='softmax')
+# ])
+# # ================== VGG16 ======================
 
 learning_rate = 0.001   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
