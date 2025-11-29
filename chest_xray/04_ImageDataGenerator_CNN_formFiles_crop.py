@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-
-
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 import glob
@@ -10,6 +8,7 @@ import os.path as path
 import os
 import cv2
 from tensorflow.keras.activations import softmax
+from tensorflow.keras.applications import VGG16
 
 IMAGEPATH = 'train'                 #  圖片資料夾路徑
 dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
@@ -96,20 +95,37 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 							data_format='channels_last')   # 圖片格式為 (張,高,寬,顏色數)
 
 # 建立模型
-model = tf.keras.models.Sequential()
-# 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
-model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3),
-                 padding="same",
-                 activation='relu',
-                 input_shape=(w,h,c)))
+# model = tf.keras.models.Sequential()
+# # 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
+# model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3),
+#                  padding="same",
+#                  activation='relu',
+#                  input_shape=(w,h,c)))
 
-model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(1000, activation='relu'))
-model.add(tf.keras.layers.Dense(500, activation='relu'))
-model.add(tf.keras.layers.Dense(250, activation='relu'))
-model.add(tf.keras.layers.Dense(100))
-model.add(tf.keras.layers.Dense(units=category,
-    activation=tf.nn.softmax ))
+
+# model.add(tf.keras.layers.Flatten())
+# # model.add(tf.keras.layers.Dense(1000, activation='relu'))
+# model.add(tf.keras.layers.Dense(500, activation='relu'))
+# model.add(tf.keras.layers.Dense(250, activation='relu'))
+# model.add(tf.keras.layers.Dense(50))
+# model.add(tf.keras.layers.Dense(units=category,
+#     activation=tf.nn.softmax ))
+
+# ================= VGG16 ==================
+
+# 載入預訓練的 VGG16 (去掉頂層)
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(w, h, c))
+base_model.trainable = False  # 凍結預訓練層
+
+# 建立新模型
+model = tf.keras.models.Sequential([
+    base_model,
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(category, activation='softmax')
+])
+
 
 learning_rate = 0.001   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
@@ -132,7 +148,7 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                   epochs=50,
+                   epochs=30,
                    callbacks=[checkpoint]
                    )
 
@@ -181,3 +197,20 @@ print("預測結果已儲存為 prediction_result.jpg")
 # cv2.imshow('image', im_bgr)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
+
+# =====================================
+# Precision, Recall, F1-Score
+from sklearn.metrics import classification_report, confusion_matrix
+import numpy as np
+
+# 預測測試集
+y_pred = np.argmax(model.predict(x_test), axis=1)
+y_true = np.argmax(y_test, axis=1)
+
+# 計算詳細指標
+print("\n分類報告:")
+print(classification_report(y_true, y_pred, target_names=['PNEUMONIA', 'NORMAL']))
+
+# 混淆矩陣
+print("\n混淆矩陣:")
+print(confusion_matrix(y_true, y_pred))
