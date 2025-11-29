@@ -105,7 +105,7 @@ model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3),
                  input_shape=(w,h,c)))
 
 model.add(tf.keras.layers.Flatten())
-# model.add(tf.keras.layers.Dense(1000, activation='relu'))
+model.add(tf.keras.layers.Dense(1000, activation='relu'))
 model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.Dense(250, activation='relu'))
 model.add(tf.keras.layers.Dense(100))
@@ -121,14 +121,20 @@ model.compile(
 
 model.summary()        # 顯示模型摘要
 
-
+checkpoint = tf.keras.callbacks.ModelCheckpoint(
+    'best_model.keras',
+    monitor='accuracy',
+    save_best_only=True,
+    mode='max',
+    verbose=1
+)
 
 # 產生訓練圖片
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                   epochs=20 #,
-                   # callbacks=[checkpoint]
+                   epochs=50 ,
+                   callbacks=[checkpoint]
                    )
 
 
