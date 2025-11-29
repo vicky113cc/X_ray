@@ -124,6 +124,7 @@ model = tf.keras.models.Sequential([base_model])
 model = tf.keras.models.Sequential([
     base_model,
     tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(1000, activation='relu'),
     tf.keras.layers.Dense(500, activation='relu'),
     tf.keras.layers.Dense(250, activation='relu'),
     tf.keras.layers.Dense(100, activation='relu'),  
