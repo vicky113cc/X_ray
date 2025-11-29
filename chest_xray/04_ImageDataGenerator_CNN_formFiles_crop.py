@@ -233,13 +233,14 @@ from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 
 # 預測測試集
-y_pred = np.argmax(model.predict(x_test), axis=1)
-y_true = np.argmax(y_test, axis=1)
+y_prob = model.predict(x_test)          # (N, 2) 機率
+y_pred = np.argmax(y_prob, axis=1)      # (N,) 預測類別 0/1
 
-# 計算詳細指標
+# y_test 是一維標籤 (N,) → 不要再 argmax
+y_true = y_test
+
 print("\n分類報告:")
 print(classification_report(y_true, y_pred, target_names=['PNEUMONIA', 'NORMAL']))
 
-# 混淆矩陣
 print("\n混淆矩陣:")
 print(confusion_matrix(y_true, y_pred))
