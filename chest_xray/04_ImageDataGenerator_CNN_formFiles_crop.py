@@ -118,14 +118,17 @@ base_model = VGG16(weights='imagenet', include_top=False, input_shape=(w, h, c))
 base_model.trainable = False  # 凍結預訓練層
 
 # 建立新模型
+model = tf.keras.models.Sequential([base_model])
+
+# 建立新模型
 model = tf.keras.models.Sequential([
     base_model,
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(500, activation='relu'),
+    tf.keras.layers.Dense(250, activation='relu'),
+    tf.keras.layers.Dense(100, activation='relu'),  
     tf.keras.layers.Dense(category, activation='softmax')
 ])
-
 # ================== VGG16 ======================
 
 learning_rate = 0.001   # 學習率
@@ -149,9 +152,9 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                   epochs=30,
-                   callbacks=[checkpoint]
-                   )
+                    epochs=30,
+                    callbacks=[checkpoint]
+                    )
 
 
 # 保存模型
