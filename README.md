@@ -1,10 +1,5 @@
-# X_ray
-<img width="1495" height="870" alt="image" src="https://github.com/user-attachments/assets/a260212a-0d05-40d7-8e76-3dceb3559989" />
 # X-ray 肺炎影像分類系統
-
-使用深度學習進行胸部 X 光影像的肺炎檢測。本專案採用卷積神經網路 (CNN) 對 X 光影像進行二元分類（正常 vs 肺炎）。
-
----
+<img width="1495" height="870" alt="image" src="https://github.com/user-attachments/assets/a260212a-0d05-40d7-8e76-3dceb3559989" />
 
 ## 專案簡介
 
@@ -366,8 +361,8 @@ F1-Score = 2 × (Precision × Recall) / (Precision + Recall)
 - 欠採樣多數類別
 
 ### 4. 優化模型架構
-- 增加 Dropout 層防止過擬合
-- 使用 Learning Rate Scheduler
+- 增加 Dropout 層防止過擬合 (我直接刪掉)
+- 使用 Learning Rate Scheduler 
 - 實驗不同的優化器
 
 ---
@@ -375,8 +370,7 @@ F1-Score = 2 × (Precision × Recall) / (Precision + Recall)
 ## 參考資料
 
 ### 資料集來源
-- Kaggle: Chest X-Ray Images (Pneumonia)
-https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia?resource=download
+- ![Kaggle: Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia?resource=download)
 
 ---
 
@@ -388,14 +382,11 @@ MIT License
 
 ## 作者
 
-廖子婷
+fayr
 
 ---
 
 **最後更新**: 2024-12-02
 
-
-
-Made with ❤️ by 廖子婷
 
 </div>
