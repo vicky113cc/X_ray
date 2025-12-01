@@ -158,7 +158,7 @@ model.add(layers.Dense(category, activation='softmax'))
 # ])
 # # ================== VGG16 ======================
 
-learning_rate = 0.1   # 學習率
+learning_rate = 0.01   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
     optimizer=opt1,
