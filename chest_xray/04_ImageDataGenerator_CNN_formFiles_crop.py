@@ -115,34 +115,28 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 # 建立模型
 model = models.Sequential()
 
-# Block 1
-model.add(layers.Conv2D(700, (3,3), padding='same', activation='relu',
+# Block 1 - 基礎特徵
+model.add(layers.Conv2D(64, (3,3), padding='same', activation='relu',
                         input_shape=(w, h, c)))
+model.add(layers.BatchNormalization())
 model.add(layers.MaxPooling2D((2,2)))
 
-# Block 2
-model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
+# Block 2 - 中層特徵
+model.add(layers.Conv2D(128, (3,3), padding='same', activation='relu'))
+model.add(layers.BatchNormalization())
 model.add(layers.MaxPooling2D((2,2)))
 
-# Block 3
-model.add(layers.Conv2D(500, (3,3), padding='same', activation='relu'))
-model.add(layers.MaxPooling2D((2,2)))
-
-# Block 4
-model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
-model.add(layers.MaxPooling2D((2,2)))
-
-# Block 5
-model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
+# Block 3 - 高層特徵
+model.add(layers.Conv2D(256, (3,3), padding='same', activation='relu'))
+model.add(layers.BatchNormalization())
 model.add(layers.MaxPooling2D((2,2)))
 
 # Flatten + Dense
 model.add(layers.Flatten())
-model.add(layers.Dense(500, activation='relu'))
+model.add(layers.Dense(256, activation='relu'))
 
 # Output
 model.add(layers.Dense(category, activation='softmax'))
-
 # # ================= VGG16 ==================
 
 # # 載入預訓練的 VGG16 (去掉頂層)
@@ -164,7 +158,7 @@ model.add(layers.Dense(category, activation='softmax'))
 # ])
 # # ================== VGG16 ======================
 
-learning_rate = 0.001   # 學習率
+learning_rate = 0.1   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
     optimizer=opt1,
