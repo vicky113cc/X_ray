@@ -370,7 +370,7 @@ F1-Score = 2 × (Precision × Recall) / (Precision + Recall)
 ## 參考資料
 
 ### 資料集來源
-- ![Kaggle: Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia?resource=download)
+- [Kaggle: Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia?resource=download)
 
 ---
 
